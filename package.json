@@ -1,0 +1,28 @@
+{
+  "name": "socialnetworkapiwithnosql",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "devDependencies": {
+    "nodemon": "^2.0.18"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aavillanueva6/SocialNetworkAPIWithNoSQL.git"
+  },
+  "keywords": [],
+  "author": "Alejandro Villanueva",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/aavillanueva6/SocialNetworkAPIWithNoSQL/issues"
+  },
+  "homepage": "https://github.com/aavillanueva6/SocialNetworkAPIWithNoSQL#readme",
+  "dependencies": {
+    "express": "^4.18.1",
+    "mongoose": "^6.4.1"
+  }
+}
