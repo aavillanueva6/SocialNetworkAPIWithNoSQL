@@ -23,18 +23,29 @@ connection.once('open', async () => {
       email: 'three@seed.com',
     },
   ];
-  // const thoughts = [
-  //   {
-
-  //   }
-  // ];
 
   await User.collection.insertMany(users);
-  // await Thought.collection.insertMany(thoughts);
+  const pulledUsers = await User.find();
+  const thoughts = [
+    {
+      thoughtText: `this is the first user's thought`,
+      username: pulledUsers[0].username,
+    },
+    {
+      thoughtText: `this is the second user's thought`,
+      username: pulledUsers[1].username,
+    },
+    {
+      thoughtText: `this is the third user's thought`,
+      username: pulledUsers[2].username,
+    },
+  ];
+  await Thought.collection.insertMany(thoughts);
 
   // loop through the saved videos, for each video we need to generate a video response and insert the video responses
   console.table(users);
-  // console.table(thoughts);
+  console.table(thoughts);
   console.info('Seeding complete! 🌱');
+
   process.exit(0);
 });
