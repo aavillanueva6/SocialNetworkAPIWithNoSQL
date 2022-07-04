@@ -28,8 +28,19 @@ module.exports = {
       .catch((err) => res.status(500).json(err));
   },
   // Update a single user
-  updateUser(req, res) {
-    return res.status(200).send('');
+  async updateUser(req, res) {
+    try {
+      const updateData = req.body;
+      const user = await User.findOne({ _id: req.params.userId });
+      if (!user) {
+        return res.status(404).json({ message: 'No user with that ID' });
+      }
+      await user.updateOne(updateData);
+      const updatedUser = await User.findOne({ _id: req.params.userId });
+      res.status(200).json(updatedUser);
+    } catch (err) {
+      res.status(500).json(err);
+    }
   },
   // Delete a specified user
   deleteUser(req, res) {
