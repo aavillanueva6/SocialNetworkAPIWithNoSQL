@@ -28,7 +28,11 @@ connection.once('open', async () => {
   const pulledUsers = await User.find();
   const thoughts = [
     {
-      thoughtText: `this is the first user's thought`,
+      thoughtText: `this is the first user's first thought`,
+      username: pulledUsers[0].username,
+    },
+    {
+      thoughtText: `this is the first user's second thought`,
       username: pulledUsers[0].username,
     },
     {

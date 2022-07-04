@@ -49,9 +49,15 @@ module.exports = {
       if (!user) {
         return res.status(404).json({ message: 'No user with that ID' });
       }
+      let deletedData = [];
+      const deletedThoughts = await Thought.deleteMany({
+        username: user.username,
+      });
       const deletedUser = await user.deleteOne();
-      res.status(200).json(deletedUser);
+      deletedData.push(deletedThoughts, deletedUser);
+      res.status(200).json(deletedData);
     } catch (err) {
+      console.error(err);
       res.status(500).json(err);
     }
   },
