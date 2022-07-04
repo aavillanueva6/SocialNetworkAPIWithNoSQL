@@ -54,7 +54,6 @@ module.exports = {
     } catch (err) {
       res.status(500).json(err);
     }
-    // return res.status(200).send('');
   },
   // Add friend to user
   addFriend(req, res) {
