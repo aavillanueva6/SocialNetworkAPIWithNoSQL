@@ -25,6 +25,7 @@
   "homepage": "https://github.com/aavillanueva6/SocialNetworkAPIWithNoSQL#readme",
   "dependencies": {
     "express": "^4.18.1",
+    "moment": "^2.29.3",
     "mongoose": "^6.4.1"
   }
 }
