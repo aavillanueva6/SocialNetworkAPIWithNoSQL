@@ -43,8 +43,18 @@ module.exports = {
     }
   },
   // Delete a specified user
-  deleteUser(req, res) {
-    return res.status(200).send('');
+  async deleteUser(req, res) {
+    try {
+      const user = await User.findOne({ _id: req.params.userId });
+      if (!user) {
+        return res.status(404).json({ message: 'No user with that ID' });
+      }
+      const deletedUser = await user.deleteOne();
+      res.status(200).json(deletedUser);
+    } catch (err) {
+      res.status(500).json(err);
+    }
+    // return res.status(200).send('');
   },
   // Add friend to user
   addFriend(req, res) {
