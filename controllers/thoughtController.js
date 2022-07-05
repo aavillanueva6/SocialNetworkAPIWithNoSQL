@@ -22,10 +22,24 @@ module.exports = {
       .catch((err) => res.status(500).json(err));
   },
   // Create a new thought
-  createThought(req, res) {
-    Thought.create(req.body)
-      .then((dbThoughtData) => res.status(201).json(dbThoughtData))
-      .catch((err) => res.status(500).json(err));
+  async createThought(req, res) {
+    try {
+      console.log(req.body.username);
+      const thoughtUser = await User.findOne({ username: req.body.username });
+      console.log('thoughtUser: ', thoughtUser);
+      if (!thoughtUser) {
+        res.status(404).json({ message: 'No user with that username' });
+      }
+      const newThought = await Thought.create(req.body);
+      await User.findOneAndUpdate(
+        { username: req.body.username },
+        { $addToSet: { thoughts: newThought._id } }
+      );
+      // then((dbThoughtData) => res.status(201).json(dbThoughtData));
+      res.status(201).json(newThought); //.json(err);
+    } catch (err) {
+      res.status(500).json(err);
+    }
   },
   // Update a single thought
   async updateThought(req, res) {
