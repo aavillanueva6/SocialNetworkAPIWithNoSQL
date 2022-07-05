@@ -7,7 +7,7 @@ module.exports = {
       .then((thoughts) => res.status(200).json(thoughts))
       .catch((err) => {
         console.error(err);
-        res.status(500).json(err);
+        return res.status(500).json(err);
       });
   },
   // Get a single thought
@@ -38,7 +38,7 @@ module.exports = {
       // then((dbThoughtData) => res.status(201).json(dbThoughtData));
       res.status(201).json(newThought); //.json(err);
     } catch (err) {
-      res.status(500).json(err);
+      return res.status(500).json(err);
     }
   },
   // Update a single thought
@@ -55,7 +55,7 @@ module.exports = {
       });
       res.status(200).json(updatedThought);
     } catch (err) {
-      res.status(500).json(err);
+      return res.status(500).json(err);
     }
   },
   // Delete a specified thought
@@ -68,15 +68,51 @@ module.exports = {
       const deletedThought = await thought.deleteOne();
       res.status(200).json(deletedThought);
     } catch (err) {
-      res.status(500).json(err);
+      return res.status(500).json(err);
     }
   },
   // Add reaction to thought
-  addReaction(req, res) {
-    return res.status(200).send('');
+  async addReaction(req, res) {
+    const thoughtId = req.params.thoughtId;
+    const thoughtDoc = await Thought.findById(thoughtId);
+    if (!thoughtDoc) {
+      return res.status(404).json({ message: 'No thought with that ID' });
+    }
+    const username = req.body.username;
+    const user = await User.findOne({ username: username });
+    if (!user) {
+      return res.status(404).json({ message: 'No user with that username' });
+    }
+
+    try {
+      const updatedThought = await Thought.findOneAndUpdate(
+        { _id: thoughtId },
+        { $addToSet: { reactions: req.body } }
+      );
+      return res.status(201).json(updatedThought);
+    } catch {
+      console.error(err);
+      return res.status(500).json(err);
+    }
   },
   // Delete reaction from thought
-  deleteReaction(req, res) {
-    return res.status(200).send('');
+  async deleteReaction(req, res) {
+    const thoughtId = req.params.thoughtId;
+    const reactionId = req.params.reactionId;
+    const thoughtDoc = await Thought.findById(thoughtId);
+    // const friendDoc = await User.findById(friend);
+    if (!thoughtDoc) {
+      return res.status(404).json({ message: 'No thought with that ID' });
+    }
+    try {
+      await Thought.findOneAndUpdate(
+        { _id: thoughtId },
+        { $pull: { reactions: { reactionId: reactionId } } }
+      );
+      return res.status(200).send('');
+    } catch {
+      console.error(err);
+      return res.status(500).json(err);
+    }
   },
 };
