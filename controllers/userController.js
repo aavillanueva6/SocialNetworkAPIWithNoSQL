@@ -7,7 +7,7 @@ module.exports = {
       .then((users) => res.status(200).json(users))
       .catch((err) => {
         console.error(err);
-        res.status(500).json(err);
+        return res.status(500).json(err);
       });
   },
   // Get a single user
@@ -39,7 +39,7 @@ module.exports = {
       const updatedUser = await User.findOne({ _id: req.params.userId });
       res.status(200).json(updatedUser);
     } catch (err) {
-      res.status(500).json(err);
+      return res.status(500).json(err);
     }
   },
   // Delete a specified user
@@ -58,7 +58,7 @@ module.exports = {
       res.status(200).json(deletedData);
     } catch (err) {
       console.error(err);
-      res.status(500).json(err);
+      return res.status(500).json(err);
     }
   },
   // Add friend to user
@@ -78,7 +78,7 @@ module.exports = {
       return res.status(201).send('');
     } catch {
       console.error(err);
-      res.status(500).json(err);
+      return res.status(500).json(err);
     }
   },
   // Delete friend from user
@@ -98,7 +98,7 @@ module.exports = {
       return res.status(200).send('');
     } catch {
       console.error(err);
-      res.status(500).json(err);
+      return res.status(500).json(err);
     }
   },
 };
