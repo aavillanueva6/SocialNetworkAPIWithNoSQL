@@ -24,7 +24,7 @@ module.exports = {
   // Create a new thought
   createThought(req, res) {
     Thought.create(req.body)
-      .then((dbThoughtData) => res.status(200).json(dbThoughtData))
+      .then((dbThoughtData) => res.status(201).json(dbThoughtData))
       .catch((err) => res.status(500).json(err));
   },
   // Update a single thought
