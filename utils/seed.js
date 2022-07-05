@@ -45,10 +45,18 @@ connection.once('open', async () => {
     },
   ];
   await Thought.collection.insertMany(thoughts);
+  const pulledThoughts = await Thought.find();
 
-  // loop through the saved videos, for each video we need to generate a video response and insert the video responses
-  console.table(users);
-  console.table(thoughts);
+  for (element of pulledThoughts) {
+    thoughtUsername = element.username;
+    const thoughtUser = await User.findOneAndUpdate(
+      { username: element.username },
+      { $addToSet: { thoughts: element._id } }
+    );
+  }
+
+  // console.table(users);
+  // console.table(thoughts);
   console.info('Seeding complete! 🌱');
 
   process.exit(0);
