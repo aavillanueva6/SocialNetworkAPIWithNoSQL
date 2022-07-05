@@ -35,7 +35,7 @@ thoughtSchema.virtual('reactionCount').get(function () {
 });
 
 function formatDate(createdAt) {
-  return moment(createdAt).format('YYYY-MM-DD hh:mm');
+  return moment(createdAt).format('YYYY-MMM-DD hh:mm');
 }
 
 const Thought = model('thought', thoughtSchema);
