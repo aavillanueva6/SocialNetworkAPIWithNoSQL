@@ -24,9 +24,7 @@ module.exports = {
   // Create a new thought
   async createThought(req, res) {
     try {
-      console.log(req.body.username);
       const thoughtUser = await User.findOne({ username: req.body.username });
-      console.log('thoughtUser: ', thoughtUser);
       if (!thoughtUser) {
         res.status(404).json({ message: 'No user with that username' });
       }
@@ -65,6 +63,11 @@ module.exports = {
       if (!thought) {
         return res.status(404).json({ message: 'No thought with that ID' });
       }
+      const username = thought.username;
+      const user = await User.findOneAndUpdate(
+        { username: username },
+        { $pull: { thoughts: req.params.thoughtId } }
+      );
       const deletedThought = await thought.deleteOne();
       res.status(200).json(deletedThought);
     } catch (err) {
@@ -85,10 +88,11 @@ module.exports = {
     }
 
     try {
-      const updatedThought = await Thought.findOneAndUpdate(
+      await Thought.findOneAndUpdate(
         { _id: thoughtId },
         { $addToSet: { reactions: req.body } }
       );
+      const updatedThought = await Thought.findOne({ _id: thoughtId });
       return res.status(201).json(updatedThought);
     } catch {
       console.error(err);
@@ -100,7 +104,6 @@ module.exports = {
     const thoughtId = req.params.thoughtId;
     const reactionId = req.params.reactionId;
     const thoughtDoc = await Thought.findById(thoughtId);
-    // const friendDoc = await User.findById(friend);
     if (!thoughtDoc) {
       return res.status(404).json({ message: 'No thought with that ID' });
     }
@@ -109,7 +112,8 @@ module.exports = {
         { _id: thoughtId },
         { $pull: { reactions: { reactionId: reactionId } } }
       );
-      return res.status(200).send('');
+      const updatedThought = await Thought.findOne({ _id: thoughtId });
+      return res.status(200).json(updatedThought);
     } catch {
       console.error(err);
       return res.status(500).json(err);
