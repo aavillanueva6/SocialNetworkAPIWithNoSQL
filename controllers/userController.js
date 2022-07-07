@@ -75,7 +75,9 @@ module.exports = {
         { _id: user },
         { $addToSet: { friends: friend } }
       );
-      return res.status(201).send('');
+      const updatedUser = await User.findOne({ _id: user });
+
+      return res.status(201).json(updatedUser);
     } catch {
       console.error(err);
       return res.status(500).json(err);
@@ -95,7 +97,8 @@ module.exports = {
         { _id: user },
         { $pull: { friends: friend } }
       );
-      return res.status(200).send('');
+      const updatedUser = await User.findOne({ _id: user });
+      return res.status(200).json(updatedUser);
     } catch {
       console.error(err);
       return res.status(500).json(err);
