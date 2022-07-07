@@ -1,6 +1,5 @@
 const connection = require('../config/connection');
 const { User, Thought } = require('../models');
-const { getRandomName, getRandomThoughts } = require('./data');
 
 connection.on('error', (err) => err);
 
@@ -24,7 +23,9 @@ connection.once('open', async () => {
     },
   ];
 
-  await User.collection.insertMany(users);
+  for (user of users) {
+    await User.create(user);
+  }
   const pulledUsers = await User.find();
   const thoughts = [
     {
@@ -44,7 +45,10 @@ connection.once('open', async () => {
       username: pulledUsers[2].username,
     },
   ];
-  await Thought.collection.insertMany(thoughts);
+
+  for (thought of thoughts) {
+    await Thought.create(thought);
+  }
   const pulledThoughts = await Thought.find();
 
   for (element of pulledThoughts) {
